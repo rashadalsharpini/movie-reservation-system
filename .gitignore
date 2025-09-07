@@ -1,0 +1,84 @@
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# IDE-specific settings (Visual Studio, Rider, VSCode)
+.vs/
+.idea/
+.vscode/
+*.swp
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+[Bb]in/
+[Oo]bj/
+
+# Build results of an ATL project
+[Dd]ebugPS/
+[Rr]eleasePS/
+dlldata.c
+
+# NuGet packages
+*.nupkg
+*.nuget.props
+*.nuget.targets
+packages/
+
+# Local configuration files
+appsettings.Development.json
+appsettings.json
+**/Properties/launchSettings.json
+secrets.json
+obj/
+
+# Roslyn files
+*.roslyncodeanalysis.sarif.json
+
+# Temporary files and logs
+*.log
+*.tlog
+*.tmp
+*.testresult
+*.testsettings
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlh
+*.tli
+*.tlx
+*.vcproj.*.props
+*.vcxproj.filters
+*.vcxproj.user
+
+# Other
+*.zip
+*.rar
+*.7z
+
+# Cache files
+project.assets.json
+project.nuget.cache
+*.csproj.AssemblyReference.cache
+*sourcelink.json
+
+# Auto-generated Global Usings
+**/*.GlobalUsings.g.cs
