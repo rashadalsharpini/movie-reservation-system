@@ -1,4 +1,4 @@
-namespace movieReservation.web;
+namespace movieReservation.web.api;
 
 public class Program
 {

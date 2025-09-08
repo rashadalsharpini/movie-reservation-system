@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "movieReservation.web", "movieReservation.web\movieReservation.web.csproj", "{05DF5C34-1A26-4969-8572-75035C1E9B9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "movieReservation.web.api", "movieReservation.web.api\movieReservation.web.api.csproj", "{05DF5C34-1A26-4969-8572-75035C1E9B9D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{641E5AF1-52DB-404A-9C8C-7C70D634C7C2}"
 EndProject
