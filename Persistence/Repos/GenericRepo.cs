@@ -8,34 +8,20 @@ namespace Persistence.Repos;
 public class GenericRepo<TEntity, TKey>(MovieDbContext db)
     : IGenericRepo<TEntity, TKey> where TEntity : BaseEntity<TKey>
 {
-
     public async Task<IEnumerable<TEntity>> GetAllAsync()
-    {
-        return await db.Set<TEntity>().ToListAsync();
-    }
+        => await db.Set<TEntity>().ToListAsync();
 
     public IQueryable<TEntity> Queryable()
-    {
-        return db.Set<TEntity>().AsQueryable();
-    }
+        => db.Set<TEntity>().AsQueryable();
 
     public async Task<TEntity?> GetByIdAsync(TKey id)
-    {
-        return await db.Set<TEntity>().FindAsync(id);
-    }
-
+        => await db.Set<TEntity>().FindAsync(id);
     public async Task AddAsync(TEntity entity)
-    {
-        await db.Set<TEntity>().AddAsync(entity);
-    }
+        => await db.Set<TEntity>().AddAsync(entity);
 
     public void Update(TEntity entity)
-    {
-        db.Set<TEntity>().Update(entity);
-    }
+        => db.Set<TEntity>().Update(entity);
 
     public void Delete(TEntity entity)
-    {
-        db.Set<TEntity>().Remove(entity);
-    }
+        => db.Set<TEntity>().Remove(entity);
 }

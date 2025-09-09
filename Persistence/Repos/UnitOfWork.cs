@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Domain.Contracts;
 using Domain.Entities;
 using Persistence.Data;
@@ -6,19 +7,9 @@ namespace Persistence.Repos;
 
 public class UnitOfWork(MovieDbContext db):IUnitOfWork
 {
-    private readonly Dictionary<string, object> _repos = [];
+    private ConcurrentDictionary<string,object> _repositories;
     public IGenericRepo<TEntity, TKey> GetRepo<TEntity, TKey>() where TEntity : BaseEntity<TKey>
-    {
-        var type = typeof(TEntity).Name;
-        if (_repos.TryGetValue(type, out object? value))
-            return (IGenericRepo<TEntity, TKey>)value;
-        var repo = new GenericRepo<TEntity, TKey>(db);
-        _repos[type] = repo;
-        return repo;
-    }
-
+       => (IGenericRepo<TEntity,TKey>) _repositories.GetOrAdd(typeof(TEntity).Name,(_) => new GenericRepo<TEntity, TKey>(db));
     public async Task<int> SaveChangesAsync()
-    {
-        return await db.SaveChangesAsync();
-    }
+        => await db.SaveChangesAsync();
 }
