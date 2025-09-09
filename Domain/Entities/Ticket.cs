@@ -7,5 +7,5 @@ public class Ticket:BaseEntity<Guid>
     public Seat Seat { get; set; }
     public int SeatId { get; set; }
     public User User { get; set; }
-    public int UserId { get; set; }
+    public string UserId { get; set; }
 }
