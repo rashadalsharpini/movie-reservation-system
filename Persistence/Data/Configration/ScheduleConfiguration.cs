@@ -10,7 +10,7 @@ public class ScheduleConfiguration:IEntityTypeConfiguration<Schedules>
     public void Configure(EntityTypeBuilder<Schedules> builder)
     {
         builder.HasOne(s => s.Movie).WithMany();
-        builder.HasOne(s => s.hall).WithMany();
+        builder.HasOne(s => s.Hall).WithMany();
         builder.HasMany(t => t.Tickets).WithOne();
     }
 }

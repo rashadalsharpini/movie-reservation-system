@@ -7,10 +7,6 @@ public class MovieDbContext:DbContext
 {
     public MovieDbContext(DbContextOptions<MovieDbContext> options):base(options){}
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(MovieDbContext).Assembly);
-    }
     public DbSet<Movie> Movies { get; set; }
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Cinema> Cinema { get; set; }
@@ -19,4 +15,8 @@ public class MovieDbContext:DbContext
     public DbSet<Schedules> Schedules { get; set; }
     public DbSet<Seat> Seats { get; set; }
     public DbSet<Ticket> Tickets { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(MovieDbContext).Assembly);
+    }
 }

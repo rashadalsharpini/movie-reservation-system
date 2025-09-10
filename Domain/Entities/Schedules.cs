@@ -6,6 +6,6 @@ public class Schedules:BaseEntity<int>
     public Movie Movie { get; set; }
     public Guid  MovieId { get; set; }
     public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
-    public Hall hall { get; set; }
-    public int  hallId { get; set; }
+    public Hall Hall { get; set; }
+    public int  HallId { get; set; }
 }
