@@ -38,6 +38,7 @@ appsettings.json
 **/Properties/launchSettings.json
 secrets.json
 obj/
+Persistence/Migrations/
 
 # Roslyn files
 *.roslyncodeanalysis.sarif.json
