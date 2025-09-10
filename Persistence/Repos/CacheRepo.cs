@@ -14,7 +14,5 @@ public class CacheRepo(IConnectionMultiplexer connection) : ICacheRepo
     }
 
     public async Task SetAsync(string cacheKey, string cacheValue, TimeSpan expiry)
-    {
-        await _database.StringSetAsync(cacheKey, cacheValue, expiry);
-    }
+       => await _database.StringSetAsync(cacheKey, cacheValue, expiry);
 }
