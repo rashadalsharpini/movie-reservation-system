@@ -1,9 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Domain.Entities;
 
-public class Hall:BaseEntity<int>
+public class Hall : BaseEntity<int>
 {
-    public string Name { get; set; }
+    [MaxLength(50)] public string Name { get; set; } = null!;
     public int Capacity { get; set; }
-    public Cinema Cinema { get; set; }
+    public Cinema Cinema { get; set; } = null!;
     public Guid CinemaId { get; set; }
 }
