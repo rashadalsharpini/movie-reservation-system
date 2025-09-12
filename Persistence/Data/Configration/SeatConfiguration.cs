@@ -8,6 +8,9 @@ public class SeatConfiguration:IEntityTypeConfiguration<Seat>
 {
     public void Configure(EntityTypeBuilder<Seat> builder)
     {
-        builder.HasOne(s => s.Hall).WithMany();
+        builder.HasOne(s => s.Hall)
+            .WithMany(h => h.Seats)
+            .HasForeignKey(s => s.HallId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -12,7 +12,7 @@ public class MovieDbContext:DbContext
     public DbSet<Cinema> Cinema { get; set; }
     public DbSet<Hall>  Halls { get; set; }
     public DbSet<MovieGenre> MovieGenres { get; set; }
-    public DbSet<Schedules> Schedules { get; set; }
+    public DbSet<Schedule> Schedules { get; set; }
     public DbSet<Seat> Seats { get; set; }
     public DbSet<Ticket> Tickets { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
