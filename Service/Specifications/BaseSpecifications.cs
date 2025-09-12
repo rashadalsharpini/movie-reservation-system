@@ -24,4 +24,15 @@ public class BaseSpecifications<TEntity, TKey> : ISpecifications<TEntity, TKey> 
 
     protected void AddInclude(Expression<Func<TEntity, object>> include)
         => Includes!.Add(include);
+    
+    public int Take { get; private set; }
+    public int Skip { get; private set; }
+    public bool IsPagination { get; set; }
+
+    protected void ApplyPagination(int pageSize, int pageIndex)
+    {
+        IsPagination = true;
+        Take = pageSize;
+        Skip = pageSize * (pageIndex - 1);
+    }
 }

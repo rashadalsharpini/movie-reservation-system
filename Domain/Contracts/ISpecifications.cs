@@ -9,4 +9,7 @@ public interface ISpecifications<TEntity, TKey> where TEntity : BaseEntity<TKey>
     public List<Expression<Func<TEntity, object>>>? Includes { get; }
     public Expression<Func<TEntity, object>>? OrderBy { get; }
     public Expression<Func<TEntity, object>>? OrderByDescending { get; }
+    int Take { get; }
+    int Skip { get; }
+    public bool IsPagination { get; set; }
 }

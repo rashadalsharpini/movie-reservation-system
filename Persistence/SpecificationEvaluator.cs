@@ -16,6 +16,8 @@ public static class SpecificationEvaluator
             query = query.OrderByDescending(specifications.OrderByDescending);
         if (specifications.Includes is not null && specifications.Includes.Count > 0)
             query = specifications.Includes.Aggregate(query, (current, include) => current.Include(include));
+        if (specifications.IsPagination)
+            query = query.Skip(specifications.Skip).Take(specifications.Take);
         return query;
     }
 }
