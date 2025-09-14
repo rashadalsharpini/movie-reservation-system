@@ -8,9 +8,9 @@ public class Ticket:BaseEntity<Guid>
     public TicketStatus Status { get; set; } = TicketStatus.Pending;
     
     public int SeatId { get; set; }
-    public Seat Seat { get; set; }
-    public string UserId { get; set; }
-    public User User { get; set; }
+    public Seat Seat { get; set; } = null!;
+    public string UserId { get; set; } = null!;
+    public User User { get; set; } = null!;
     public int ScheduleId { get; set; }
     public Schedule Schedule { get; set; }
 }
@@ -21,4 +21,5 @@ public enum TicketStatus
     Confirmed,
     Cancelled,
     Used
+
 }
