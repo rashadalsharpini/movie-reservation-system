@@ -1,5 +1,3 @@
-using Shared;
-
 namespace Domain.Entities;
 
 public class Ticket:BaseEntity<Guid>
@@ -15,4 +13,12 @@ public class Ticket:BaseEntity<Guid>
     public User User { get; set; }
     public int ScheduleId { get; set; }
     public Schedule Schedule { get; set; }
+}
+
+public enum TicketStatus
+{
+    Pending,
+    Confirmed,
+    Cancelled,
+    Used
 }

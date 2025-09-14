@@ -1,0 +1,15 @@
+using AutoMapper;
+using Domain.Entities;
+using Shared.Dtos;
+
+namespace Service.Mapping;
+
+public class MovieProfile: Profile
+{
+    public MovieProfile()
+    {
+        CreateMap<Movie, ResponseMovieDto>();
+        CreateMap<CreateMovieDto, Movie>();
+        CreateMap<UpdateMovieDto, Movie>();
+    }
+}
