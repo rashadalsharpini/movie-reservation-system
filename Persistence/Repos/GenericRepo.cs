@@ -37,7 +37,4 @@ public class GenericRepo<TEntity, TKey>(MovieDbContext db)
 
     public void Delete(TEntity entity)
         => db.Set<TEntity>().Remove(entity);
-
-    public IQueryable<TEntity> ApplySpecification(ISpecifications<TEntity, TKey> specifications)
-        => SpecificationEvaluator.CreateQuery(db.Set<TEntity>(), specifications);
 }
