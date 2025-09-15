@@ -34,14 +34,21 @@ public class GenreService(IUnitOfWork _unitOfWork,IMapper _mapper ):IGenre
         throw new NotImplementedException();
     }
 
-    public Task<bool> UpdateGenreAsync(Guid id, CreateOrUpdateGenreDto genreDto)
+    public async Task<bool> UpdateGenreAsync(Guid id, CreateOrUpdateGenreDto genreDto)
     {
-        throw new NotImplementedException();
+        var existingGenre = await _unitOfWork.GetRepo<Genre, Guid>().GetByIdAsync(id);
+        if (existingGenre == null) throw new Exception($"Genre with id {id} was not found"); 
+        existingGenre= _mapper.Map(genreDto, existingGenre);
+        _unitOfWork.GetRepo<Genre,Guid>().Update(existingGenre);
+        return await _unitOfWork.SaveChangesAsync()>0;
     }
 
-    public Task<bool> DeleteGenreAsync(Guid id)
+    public async Task<bool> DeleteGenreAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var existingGenre= await _unitOfWork.GetRepo<Genre, Guid>().GetByIdAsync(id);
+        if (existingGenre == null) throw new Exception($"Genre with id {id} was not found");
+        _unitOfWork.GetRepo<Genre,Guid>().Delete(existingGenre);
+        return await _unitOfWork.SaveChangesAsync()>0;
     }
     
 }
