@@ -1,3 +1,4 @@
+using System.Globalization;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
@@ -32,13 +33,29 @@ public class MovieService(IUnitOfWork _unitOfWork,IMapper _mapper,IGenre _genre)
         return await GetByIdAsync(movie.Id);
     }
 
-    public Task<bool> UpdateAsync(Guid id, UpdateMovieDto dto)
+    public async Task<bool> UpdateAsync(Guid id, UpdateMovieDto dto)
     {
-        throw new NotImplementedException();
+        var existingMovie = await _unitOfWork.GetRepo<Movie, Guid>().GetByIdAsync(id);
+        if (existingMovie == null) throw new Exception($"Movie with id {id} was not found"); 
+        existingMovie= _mapper.Map(dto, existingMovie);
+        if (dto.GenreNames != null)
+        {
+            existingMovie.Genres.Clear();
+            foreach (var genreName in dto.GenreNames)
+            {
+                var genre= await _genre.GetOrCreateAsync(genreName);
+                existingMovie.Genres.Add(genre);
+            }
+        }
+       _unitOfWork.GetRepo<Movie,Guid>().Update(existingMovie);
+       return await _unitOfWork.SaveChangesAsync()>0;
     }
     
-    public Task<bool> DeleteAsync(Guid id)
+    public async Task<bool> DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+       var existingMovie= await _unitOfWork.GetRepo<Movie, Guid>().GetByIdAsync(id);
+       if (existingMovie == null) throw new Exception($"Movie with id {id} was not found");
+       _unitOfWork.GetRepo<Movie,Guid>().Delete(existingMovie);
+      return await _unitOfWork.SaveChangesAsync()>0;
     }
 }
