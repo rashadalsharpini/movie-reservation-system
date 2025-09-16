@@ -1,23 +1,29 @@
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
+using Service.Specifications;
 using ServiceAbstraction;
+using Shared;
 using Shared.Dtos;
 
 namespace Service;
 
 public class GenreService(IUnitOfWork _unitOfWork,IMapper _mapper ):IGenre
 {
-    public async Task<ResponseGenreDto> GetAllAsync()
+    public async Task<PaginatedResult<ResponseGenreDto>> GetAllAsync(MovieParameterSpecification parameterSpecification)
     {
-        throw new NotImplementedException();
+        var geners = await _unitOfWork.GetRepo<Genre, Guid>().GetAllAsync(new GenreSpecification(parameterSpecification));
+        var result1= _mapper.Map<IEnumerable<ResponseGenreDto>>(geners);
+        var finalResult = new PaginatedResult<ResponseGenreDto>(
+            parameterSpecification.PageIndex,
+            parameterSpecification.PageSize,
+            null,
+            result1
+        );
+        return finalResult;
+        
     }
-
-    public Task<ResponseGenreDto> GetByIdAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public async Task<Genre> GetOrCreateAsync(string genre)
     {
         var correctedName= genre.ToLower().Trim();
@@ -29,9 +35,12 @@ public class GenreService(IUnitOfWork _unitOfWork,IMapper _mapper ):IGenre
         return newGenre;
     }
 
-    public Task<ResponseGenreDto> CreateGenreAsync(CreateOrUpdateGenreDto genreDto)
+    public async Task<ResponseGenreDto> CreateGenreAsync(CreateOrUpdateGenreDto genreDto)
     {
-        throw new NotImplementedException();
+        var newMovie= _mapper.Map<Genre>(genreDto);
+        await _unitOfWork.GetRepo<Genre,Guid>().AddAsync(newMovie);
+        await _unitOfWork.SaveChangesAsync();
+        return _mapper.Map<ResponseGenreDto>(newMovie);
     }
 
     public async Task<bool> UpdateGenreAsync(Guid id, CreateOrUpdateGenreDto genreDto)
