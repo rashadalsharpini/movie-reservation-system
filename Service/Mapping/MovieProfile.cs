@@ -10,6 +10,7 @@ public class MovieProfile: Profile
     {
         CreateMap<Movie, ResponseMovieDto>();
         CreateMap<CreateMovieDto, Movie>();
-        CreateMap<UpdateMovieDto, Movie>();
+        CreateMap<UpdateMovieDto, Movie>()
+            .ForMember(m=>m.Genres,opt=>opt.Ignore());
     }
 }

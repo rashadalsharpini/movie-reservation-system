@@ -38,3 +38,4 @@ public class GenericRepo<TEntity, TKey>(MovieDbContext db)
     public void Delete(TEntity entity)
         => db.Set<TEntity>().Remove(entity);
 }
+

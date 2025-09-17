@@ -1,10 +1,12 @@
 using Domain.Entities;
+using Shared.Dtos;
 
 namespace Service.Specifications;
 
-public class MovieSpecifications : BaseSpecifications<Movie, Guid>
+public class MovieSpecifications : BaseSpecifications<Movie,Guid>
 {
-    public MovieSpecifications(string genre) : base(m => m.Genres.Any(g => g.Name == genre))
+    public MovieSpecifications(MovieParameterSpecification parameterSpecification) 
+        :base(movie=>(string.IsNullOrWhiteSpace(parameterSpecification.Search)||movie.Name.ToLower().Contains(parameterSpecification.Search.ToLower().Trim())))
     {
         AddInclude(m => m.Genres);
         AddInclude(m => m.Schedules);
