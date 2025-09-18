@@ -1,4 +1,5 @@
 using Persistence;
+using Service;
 
 namespace movieReservation.web.api;
 
@@ -15,6 +16,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddInfrastructure(builder.Configuration);
+        builder.Services.AddAppServices();
 
         var app = builder.Build();
 
