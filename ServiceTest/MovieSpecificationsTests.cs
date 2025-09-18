@@ -1,5 +1,6 @@
 using Domain.Entities;
 using Service.Specifications;
+using Shared.Dtos;
 
 namespace ServiceTest;
 
@@ -45,12 +46,13 @@ public class MovieSpecificationsTests
             },
         };
         //Act
-        // var spec = new MovieSpecifications("Action");
-        // var orderedMovies = movies.AsQueryable().Where(spec.Criteria!).OrderBy(spec.OrderBy!);
+        var mps = new MovieParameterSpecification("Action");
+        var spec = new MovieSpecifications(mps);
+        var orderedMovies = movies.AsQueryable().Where(spec.Criteria!).OrderBy(spec.OrderBy!);
         // //Assert
-        // Assert.Equal(2, orderedMovies.Count());
-        // Assert.Equal("A Movie", orderedMovies.First().Name);
-        // Assert.Equal("C Movie", orderedMovies.Last().Name);
+        Assert.Equal(2, orderedMovies.Count());
+        Assert.Equal("A Movie", orderedMovies.First().Name);
+        Assert.Equal("C Movie", orderedMovies.Last().Name);
     }
 
     [Fact]

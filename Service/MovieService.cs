@@ -9,7 +9,7 @@ using Shared.Dtos;
 
 namespace Service;
 
-public class MovieService(IUnitOfWork _unitOfWork,IMapper _mapper,IGenre _genre):IMovie
+public class MovieService(IUnitOfWork _unitOfWork,IMapper _mapper,IGenreService genreService):IMovieService
 {
     public async Task<PaginatedResult<ResponseMovieDto>> GetAllAsync(MovieParameterSpecification parameterSpecification)
     {
@@ -35,7 +35,7 @@ public class MovieService(IUnitOfWork _unitOfWork,IMapper _mapper,IGenre _genre)
         var movie = _mapper.Map<Movie>(movieDto);
         foreach (var genreName in movieDto.GenreNames)
         {
-            var genre= await _genre.GetOrCreateAsync(genreName);
+            var genre= await genreService.GetOrCreateAsync(genreName);
             movie.Genres.Add(genre);
         }
         await _unitOfWork.GetRepo<Movie, Guid>().AddAsync(movie); 
@@ -53,7 +53,7 @@ public class MovieService(IUnitOfWork _unitOfWork,IMapper _mapper,IGenre _genre)
             existingMovie.Genres.Clear();
             foreach (var genreName in dto.GenreNames)
             {
-                var genre= await _genre.GetOrCreateAsync(genreName);
+                var genre= await genreService.GetOrCreateAsync(genreName);
                 existingMovie.Genres.Add(genre);
             }
         }

@@ -8,7 +8,7 @@ using Shared.Dtos;
 
 namespace Service;
 
-public class GenreService(IUnitOfWork _unitOfWork,IMapper _mapper ):IGenre
+public class GenreService(IUnitOfWork _unitOfWork,IMapper _mapper ):IGenreService
 {
     public async Task<PaginatedResult<ResponseGenreDto>> GetAllAsync(MovieParameterSpecification parameterSpecification)
     {

@@ -3,7 +3,7 @@ using Shared.Dtos;
 
 namespace ServiceAbstraction;
 
-public interface IMovie
+public interface IMovieService
 {
     Task<PaginatedResult<ResponseMovieDto>> GetAllAsync(MovieParameterSpecification parameterSpecification);
     Task<ResponseMovieDto> GetByIdAsync(Guid id);
