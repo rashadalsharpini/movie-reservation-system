@@ -6,7 +6,7 @@ namespace Service.Specifications;
 public class MovieSpecifications : BaseSpecifications<Movie,Guid>
 {
     public MovieSpecifications(MovieParameterSpecification parameterSpecification) 
-        :base(m=>m.Genres.Any(g=>g.Name.ToLower()==parameterSpecification.Search!.ToLower()))
+        :base(m=>m.Genres.Any(g=>g.Name.ToLower().Trim()==parameterSpecification.Search!.ToLower().Trim()))
     {
         AddInclude(m => m.Genres);
         AddInclude(m => m.Schedules);
