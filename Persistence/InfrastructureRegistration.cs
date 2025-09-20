@@ -18,6 +18,7 @@ public static class InfrastructureRegistration
         });
         services.AddScoped<ICacheRepo, CacheRepo>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IScheduleRepo, ScheduleRepo>();
         services.AddSingleton<IConnectionMultiplexer>(_ =>
             ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnection")!));
         services.AddDbContext<MovieIdentityDbContext>(opt =>

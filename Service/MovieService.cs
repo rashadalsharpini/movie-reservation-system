@@ -1,6 +1,7 @@
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
+using Service.Mapping;
 using Service.Specifications;
 using ServiceAbstraction;
 using Shared;
@@ -10,11 +11,11 @@ namespace Service;
 
 public class MovieService(IUnitOfWork unitOfWork,IMapper mapper,IGenreService genreService):IMovieService
 {
-    public async Task<PaginatedResult<ResponseMovieDto>> GetAllAsync(MovieParameterSpecification parameterSpecification)
+    public async Task<PaginatedResult<ResponseMovieScheduleDto>> GetAllAsync(MovieParameterSpecification parameterSpecification)
     {
         var movies = await unitOfWork.GetRepo<Movie, Guid>().GetAllAsync(new MovieSpecifications(parameterSpecification));
-        var result1= mapper.Map<IEnumerable<ResponseMovieDto>>(movies);
-        var finalResult = new PaginatedResult<ResponseMovieDto>(
+        var result1= mapper.Map<IEnumerable<ResponseMovieScheduleDto>>(movies);
+        var finalResult = new PaginatedResult<ResponseMovieScheduleDto>(
             parameterSpecification.PageIndex,
             parameterSpecification.PageSize,
             null,
@@ -23,13 +24,14 @@ public class MovieService(IUnitOfWork unitOfWork,IMapper mapper,IGenreService ge
         return finalResult;
     }
 
-    public async Task<ResponseMovieDto> GetByIdAsync(Guid id)
+    public async Task<ResponseMovieScheduleDto> GetByIdAsync(Guid id)
     {
         var existingMovie = await unitOfWork.GetRepo<Movie, Guid>().GetByIdAsync(new MovieSpecifications(id));
-        return existingMovie !=null ? mapper.Map<ResponseMovieDto>(existingMovie) : throw new Exception($"the movie with {id}  was not found");
+        var schedule = await unitOfWork.ScheduleRepo.GetSchedulesByMovieIdAsync(id);
+        return existingMovie!.ReturnMovieSchedulesToDto(schedule);
     }
 
-    public async Task<ResponseMovieDto> CreateAsync(CreateMovieDto movieDto)
+    public async Task<ResponseMovieScheduleDto> CreateAsync(CreateMovieDto movieDto)
     {
         var movie = mapper.Map<Movie>(movieDto);
         foreach (var genreName in movieDto.GenreNames)
