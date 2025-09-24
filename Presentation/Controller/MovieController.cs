@@ -21,18 +21,21 @@ public class MovieController(IServiceManager serviceManager) : ApiBaseController
         return Ok(result);
     }
 
+    [HttpPost]
     public async Task<ActionResult<ResponseMovieScheduleDto>> CreateAsync(CreateMovieDto dto)
     {
         var result = await serviceManager.MovieService.CreateAsync(dto);
         return Ok(result);
     }
 
+    [HttpPut("{id:guid}")]
     public async Task<ActionResult<bool>> UpdateAsync(Guid id, UpdateMovieDto dto)
     {
         var result = await serviceManager.MovieService.UpdateAsync(id, dto);
         return Ok(result);
     }
 
+    [HttpDelete("{id:guid}")]
     public async Task<ActionResult<bool>> DeleteAsync(Guid id)
     {
         var result = await serviceManager.MovieService.DeleteAsync(id);
