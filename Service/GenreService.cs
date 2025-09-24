@@ -1,10 +1,7 @@
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
-using Service.Specifications;
 using ServiceAbstraction;
-using Shared;
-using Shared.Dtos;
 
 namespace Service;
 

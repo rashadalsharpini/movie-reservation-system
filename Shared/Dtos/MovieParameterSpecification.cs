@@ -1,5 +1,3 @@
-using Domain.Entities;
-
 namespace Shared.Dtos;
 
 public class MovieParameterSpecification
