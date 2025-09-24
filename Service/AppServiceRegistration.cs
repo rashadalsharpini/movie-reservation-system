@@ -13,7 +13,9 @@ public static class AppServiceRegistration
         var config = new MapperConfiguration(cfg => { cfg.AddMaps(typeof(AssemblyRef)); }, new LoggerFactory());
         services.AddSingleton(config.CreateMapper());
         services.AddScoped<IMovieService, MovieService>();
+        services.AddScoped<Func<IMovieService>>(sp => sp.GetRequiredService<IMovieService>);
         services.AddScoped<IGenreService, GenreService>();
+        services.AddScoped<Func<IGenreService>>(sp => sp.GetRequiredService<IGenreService>);
         services.AddScoped<IServiceManager, ServiceManager>();
         return services;
     }
