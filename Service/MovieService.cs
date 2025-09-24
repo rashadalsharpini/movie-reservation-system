@@ -16,10 +16,11 @@ public class MovieService(IUnitOfWork unitOfWork, IMapper mapper, IGenreService 
         var movies = await unitOfWork.GetRepo<Movie, Guid>()
             .GetAllAsync(new MovieSpecifications(parameterSpecification));
         var result1 = mapper.Map<IEnumerable<ResponseMovieScheduleDto>>(movies);
+        var totalCount = await unitOfWork.GetRepo<Movie,Guid>().CountAsync(new MovieCountSpecification(parameterSpecification));
         var finalResult = new PaginatedResult<ResponseMovieScheduleDto>(
             parameterSpecification.PageIndex,
             parameterSpecification.PageSize,
-            null,
+            totalCount,
             result1
         );
         return finalResult;
