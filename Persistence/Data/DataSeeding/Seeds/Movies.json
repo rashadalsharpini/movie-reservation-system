@@ -1,0 +1,48 @@
+[
+  {
+    "Name": "Inception",
+    "Description": "A thief who steals corporate secrets through the use of dream-sharing technology is",
+    "ReleaseDate": "2010-07-16",
+    "Rating": 8.8,
+    "DurationMinutes": 148,
+    "Genres": [
+      {
+        "Id": "something"
+      },
+      {
+        "Id": "something"
+      }
+    ],
+    "Schedules": [
+      {
+        "Id": "something"
+      },
+      {
+        "Id": "something"
+      }
+    ]
+  },
+  {
+    "Name": "Interstellar",
+    "Description": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+    "ReleaseDate": "2014-11-07",
+    "Rating": 8.6,
+    "DurationMinutes": 169,
+    "Genres": [
+      {
+        "Id": "something"
+      },
+      {
+        "Id": "something"
+      }
+    ],
+    "Schedules": [
+      {
+        "Id": "something"
+      },
+      {
+        "Id": "something"
+      }
+    ]
+  }
+]

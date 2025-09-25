@@ -1,0 +1,26 @@
+[
+  {
+    "ShowDateTime": "2025-10-01T19:30:00",
+    "BasePrice": 12.50,
+    "MovieId": "aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+    "HallId": 1
+  },
+  {
+    "ShowDateTime": "2025-10-02T21:00:00",
+    "BasePrice": 15.00,
+    "MovieId": "aaaaaaa1-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+    "HallId": 2
+  },
+  {
+    "ShowDateTime": "2025-10-05T18:00:00",
+    "BasePrice": 14.00,
+    "MovieId": "aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+    "HallId": 1
+  },
+  {
+    "ShowDateTime": "2025-10-06T20:30:00",
+    "BasePrice": 16.00,
+    "MovieId": "aaaaaaa2-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+    "HallId": 3
+  }
+]
