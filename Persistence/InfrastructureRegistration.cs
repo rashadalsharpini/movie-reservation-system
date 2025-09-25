@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Data;
+using Persistence.Data.DataSeeding;
 using Persistence.Repos;
 using StackExchange.Redis;
 
@@ -19,6 +20,7 @@ public static class InfrastructureRegistration
         services.AddScoped<ICacheRepo, CacheRepo>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IScheduleRepo, ScheduleRepo>();
+        services.AddScoped<IDataSeeding, DataSeeding>();
         services.AddSingleton<IConnectionMultiplexer>(_ =>
             ConnectionMultiplexer.Connect(configuration.GetConnectionString("RedisConnection")!));
         services.AddDbContext<MovieIdentityDbContext>(opt =>

@@ -1,3 +1,4 @@
+using movieReservation.web.api.Extentions;
 using Persistence;
 using Service;
 
@@ -5,7 +6,7 @@ namespace movieReservation.web.api;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public async static Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,7 @@ public class Program
         builder.Services.AddAppServices();
 
         var app = builder.Build();
-
+        await app.SeedDbInitializeAsync();
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
