@@ -5,7 +5,7 @@ public class MovieParameterSpecification
     private const int MaxPageSize = 10;
     private const int DefaultPageSize = 5;
     public string? Search { get; set; }
-    public string Genre { get; set; } = null!;
+    public string? Genre { get; set; } 
     public decimal? Rating  { get; set; }
     public DateTime? ExactReleaseDate { get; set; }
     

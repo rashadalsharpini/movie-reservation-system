@@ -1,8 +1,6 @@
-using Domain.Entities;
-
 namespace Shared.Dtos;
 
-public class ResponseMovieScheduleDto
+public class ResponseMovieDto
 {
     public Guid Id { get; set; }
     
@@ -17,5 +15,4 @@ public class ResponseMovieScheduleDto
     public DateTime ReleaseDate { get; set; }
     
     public List<string> Genres { get; set; } = null!;
-    public ICollection<ScheduleDto> Schedules { get; set; } = new List<ScheduleDto>();
 }

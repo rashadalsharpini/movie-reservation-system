@@ -10,14 +10,14 @@ namespace Service;
 
 public class MovieService(IUnitOfWork unitOfWork, IMapper mapper, IGenreService genreService) : IMovieService
 {
-    public async Task<PaginatedResult<ResponseMovieScheduleDto>> GetAllAsync(
+    public async Task<PaginatedResult<ResponseMovieDto>> GetAllAsync(
         MovieParameterSpecification parameterSpecification = null!)
     {
         var movies = await unitOfWork.GetRepo<Movie, Guid>()
             .GetAllAsync(new MovieSpecifications(parameterSpecification));
-        var result1 = mapper.Map<IEnumerable<ResponseMovieScheduleDto>>(movies);
+        var result1 = mapper.Map<IEnumerable<ResponseMovieDto>>(movies);
         var totalCount = await unitOfWork.GetRepo<Movie,Guid>().CountAsync(new MovieCountSpecification(parameterSpecification));
-        var finalResult = new PaginatedResult<ResponseMovieScheduleDto>(
+        var finalResult = new PaginatedResult<ResponseMovieDto>(
             parameterSpecification.PageIndex,
             parameterSpecification.PageSize,
             totalCount,

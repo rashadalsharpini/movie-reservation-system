@@ -21,7 +21,7 @@ public class Program
         builder.Services.AddAppServices();
 
         var app = builder.Build();
-        await app.SeedDbInitializeAsync();
+       await app.SeedDbInitializeAsync();
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
