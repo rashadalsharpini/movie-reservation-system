@@ -1,42 +1,35 @@
 [
   {
-    "Id": 1,
     "Name": "Hall A",
     "Capacity": 100,
     "CinemaId": "c1111111-1111-1111-1111-111111111111"
   },
   {
-    "Id": 2,
     "Name": "Hall B",
     "Capacity": 150,
     "CinemaId": "c1111111-1111-1111-1111-111111111111"
   },
   {
-    "Id": 3,
     "Name": "IMAX Theater",
     "Capacity": 200,
     "CinemaId": "c1111111-1111-1111-1111-111111111111"
   },
   {
-    "Id": 4,
     "Name": "Premium Hall",
     "Capacity": 80,
     "CinemaId": "c2222222-2222-2222-2222-222222222222"
   },
   {
-    "Id": 5,
     "Name": "Standard Hall 1",
     "Capacity": 120,
     "CinemaId": "c2222222-2222-2222-2222-222222222222"
   },
   {
-    "Id": 6,
     "Name": "VIP Theater",
     "Capacity": 50,
     "CinemaId": "c3333333-3333-3333-3333-333333333333"
   },
   {
-    "Id": 7,
     "Name": "Main Hall",
     "Capacity": 180,
     "CinemaId": "c3333333-3333-3333-3333-333333333333"

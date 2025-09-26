@@ -14,20 +14,24 @@ public class DataSeeding(
     {
         try
         {
-            if (!db.Database.GetPendingMigrations().Any())
+            var solutionDir = Path.Combine(AppContext.BaseDirectory, @"../../../..");
+            if (!(await db.Database.GetPendingMigrationsAsync()).Any())
             {
                 await db.Database.MigrateAsync();
-                // if (!db.Cinema.Any())
-                // {
-                //     var cinemaData = File.OpenRead(@"Persistence/Data/DataSeeding/Seeds/Cinema.json");
-                //     var cinemas = await JsonSerializer.DeserializeAsync<List<Cinema>>(cinemaData);
-                //     if (cinemas is not null && cinemas.Any())
-                //         await db.Cinema.AddRangeAsync(cinemas);
-                //     await db.SaveChangesAsync();
-                // }
+                if (!db.Cinema.Any())
+                {
+                    var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Cinema.json");
+                    var cinemaData = File.OpenRead(data);
+                    var cinemas = await JsonSerializer.DeserializeAsync<List<Cinema>>(cinemaData);
+                    if (cinemas is not null && cinemas.Any())
+                        await db.Cinema.AddRangeAsync(cinemas);
+                    await db.SaveChangesAsync();
+                }
+
                 if (!db.Genres.Any())
                 {
-                    var genresData = File.OpenRead(@"../Persistence/Data/DataSeeding/Seeds/Genres.json");
+                    var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Genres.json");
+                    var genresData = File.OpenRead(data);
                     var genres = await JsonSerializer.DeserializeAsync<List<Genre>>(genresData);
                     if (genres is not null && genres.Any())
                     {
@@ -38,7 +42,8 @@ public class DataSeeding(
 
                 if (!db.Movies.Any())
                 {
-                    var moviesData = File.OpenRead(@"../Persistence/Data/DataSeeding/Seeds/Movies.json");
+                    var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Movies.json");
+                    var moviesData = File.OpenRead(data);
                     var movies = await JsonSerializer.DeserializeAsync<List<Movie>>(moviesData);
                     if (movies is not null && movies.Any())
                     {
@@ -49,7 +54,8 @@ public class DataSeeding(
 
                 if (!db.Halls.Any())
                 {
-                    var hallsData = File.OpenRead(@"../Persistence/Data/DataSeeding/Seeds/Halls.json");
+                    var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Halls.json");
+                    var hallsData = File.OpenRead(data);
                     var halls = await JsonSerializer.DeserializeAsync<List<Hall>>(hallsData);
                     if (halls is not null && halls.Any())
                     {
@@ -60,7 +66,8 @@ public class DataSeeding(
 
                 if (!db.Seats.Any())
                 {
-                    var seatsData = File.OpenRead(@"../Persistence/Data/DataSeeding/Seeds/Seats.json");
+                    var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Seats.json");
+                    var seatsData = File.OpenRead(data);
                     var seats = await JsonSerializer.DeserializeAsync<List<Seat>>(seatsData);
                     if (seats is not null && seats.Any())
                     {
@@ -71,7 +78,8 @@ public class DataSeeding(
 
                 if (!db.MovieGenres.Any())
                 {
-                    var movieGenresData = File.OpenRead(@"../Persistence/Data/DataSeeding/Seeds/MovieGenres.json");
+                    var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/MovieGenres.json");
+                    var movieGenresData = File.OpenRead(data);
                     var movieGenres = await JsonSerializer.DeserializeAsync<List<MovieGenre>>(movieGenresData);
                     if (movieGenres is not null && movieGenres.Any())
                     {
@@ -82,7 +90,8 @@ public class DataSeeding(
 
                 if (!db.Schedules.Any())
                 {
-                    var schedulesData = File.OpenRead(@"../Persistence/Data/DataSeeding/Seeds/Schedules.json");
+                    var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Schedules.json");
+                    var schedulesData = File.OpenRead(data);
                     var schedules = await JsonSerializer.DeserializeAsync<List<Schedule>>(schedulesData);
                     if (schedules is not null && schedules.Any())
                     {

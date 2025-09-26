@@ -1,7 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Domain.Entities;
 
 public class Ticket : BaseEntity<Guid>
 {
+    [Precision(10, 2)]
     public decimal FinalPrice { get; set; }
     public bool IsPaid { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
