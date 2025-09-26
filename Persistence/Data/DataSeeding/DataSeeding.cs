@@ -76,18 +76,6 @@ public class DataSeeding(
                     }
                 }
 
-                if (!db.MovieGenres.Any())
-                {
-                    var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/MovieGenres.json");
-                    var movieGenresData = File.OpenRead(data);
-                    var movieGenres = await JsonSerializer.DeserializeAsync<List<MovieGenre>>(movieGenresData);
-                    if (movieGenres is not null && movieGenres.Any())
-                    {
-                        await db.MovieGenres.AddRangeAsync(movieGenres);
-                        await db.SaveChangesAsync();
-                    }
-                }
-
                 if (!db.Schedules.Any())
                 {
                     var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Schedules.json");
