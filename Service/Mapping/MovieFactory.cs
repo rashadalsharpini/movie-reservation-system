@@ -16,7 +16,7 @@ public static class MovieFactory
             Rating = movie.Rating,
             ReleaseDate = movie.ReleaseDate,
             Genres = movie.Genres.Select(g => g.Name).ToList(),
-            Schedules = schedules.ToList()
+            //Schedules = schedules.ToList()
         };
         return movieScheduleDto;
     }

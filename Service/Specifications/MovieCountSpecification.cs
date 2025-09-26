@@ -11,8 +11,8 @@ public class MovieCountSpecification:BaseSpecifications<Movie,Guid>
         : base(movie =>
             (string.IsNullOrWhiteSpace(parameterSpecification.Search) ||
              movie.Name.ToLower().Contains(parameterSpecification.Search.ToLower().Trim()))
-            && string.IsNullOrWhiteSpace(parameterSpecification.Genre) || movie.Genres.Any(g =>
-                g.Name.ToLower() == parameterSpecification.Genre.ToLower().Trim())
+            && (string.IsNullOrWhiteSpace(parameterSpecification.Genre) || 
+                movie.Genres.Any(g => g.Name.ToLower() == parameterSpecification.Genre.ToLower().Trim()))
             && (!parameterSpecification.ExactReleaseDate.HasValue ||
                 movie.ReleaseDate.Year == parameterSpecification.ExactReleaseDate.Value.Year)
             && (!parameterSpecification.MinReleaseDate.HasValue ||

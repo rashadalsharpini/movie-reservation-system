@@ -17,5 +17,5 @@ public class ResponseMovieScheduleDto
     public DateTime ReleaseDate { get; set; }
     
     public List<string> Genres { get; set; } = null!;
-    public ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
+    //public ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
 }
