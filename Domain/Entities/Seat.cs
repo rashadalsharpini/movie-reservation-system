@@ -8,7 +8,5 @@ public class Seat : BaseEntity<int>
 
     public int HallId { get; set; }
     public Hall Hall { get; set; } = null!;
-    public Schedule Schedule { get; set; } = null!;
-    public int ScheduleId { get; set; }
     public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }
