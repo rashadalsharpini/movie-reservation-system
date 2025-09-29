@@ -7,6 +7,7 @@ namespace Presentation.Controller;
 
 public class MovieController(IServiceManager serviceManager) : ApiBaseController
 {
+    [Cache]
     [HttpGet]
     public async Task<ActionResult<PaginatedResult<ResponseMovieScheduleDto>>> GetAllMovieSchedules(
         [FromQuery] MovieParameterSpecification parameters)
