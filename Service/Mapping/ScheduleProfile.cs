@@ -9,5 +9,7 @@ public class ScheduleProfile:Profile
     public ScheduleProfile()
     {
         CreateMap<Schedule, ScheduleDto>();
+        CreateMap<CreateScheduleDto, Schedule>();
+        CreateMap<Schedule,ResponseScheduleDto>();
     }
 }

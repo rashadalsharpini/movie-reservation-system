@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Domain.Entities;
 
 namespace Domain.Contracts;
@@ -9,6 +10,7 @@ public interface IGenericRepo<TEntity, TKey> where TEntity : BaseEntity<TKey>
     Task<TEntity?> GetByIdAsync(ISpecifications<TEntity, TKey> specifications);
     Task<int> CountAsync(ISpecifications<TEntity, TKey> specifications);
     Task<Genre?> FindByNameAsync(string genreName);
+    Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate);
     Task<IEnumerable<TEntity>> GetAllAsync();
     Task<TEntity?> GetByIdAsync(TKey id);
     Task AddAsync(TEntity entity);
