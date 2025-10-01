@@ -16,6 +16,10 @@ public static class AppServiceRegistration
         services.AddScoped<Func<IMovieService>>(sp => sp.GetRequiredService<IMovieService>);
         services.AddScoped<IGenreService, GenreService>();
         services.AddScoped<Func<IGenreService>>(sp => sp.GetRequiredService<IGenreService>);
+        services.AddScoped<Func<ISeatService>>(sp => sp.GetRequiredService<ISeatService>);
+        services.AddScoped<Func<IScheduleService>>(sp => sp.GetRequiredService<IScheduleService>);
+        services.AddScoped<ISeatService, SeatService>();
+        services.AddScoped<IScheduleService, ScheduleService>();
         services.AddScoped<IServiceManager, ServiceManager>();
         return services;
     }

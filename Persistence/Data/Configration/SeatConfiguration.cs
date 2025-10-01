@@ -12,5 +12,6 @@ public class SeatConfiguration:IEntityTypeConfiguration<Seat>
             .WithMany(h => h.Seats)
             .HasForeignKey(s => s.HallId)
             .OnDelete(DeleteBehavior.Cascade);
+       
     }
 }

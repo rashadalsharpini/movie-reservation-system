@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Domain.Contracts;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,8 @@ public class GenericRepo<TEntity, TKey>(MovieDbContext db)
 
     public async Task<Genre?> FindByNameAsync(string genreName)
         => await db.Genres.FirstOrDefaultAsync(g => g.Name.ToLower() == genreName);
+    public async Task<IEnumerable<TEntity>> FindAllAsync(Expression<Func<TEntity, bool>> predicate)
+        => await db.Set<TEntity>().Where(predicate).ToListAsync();
 
 
     public async Task<TEntity?> GetByIdAsync(TKey id)
