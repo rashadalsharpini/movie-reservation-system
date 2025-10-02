@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
@@ -16,7 +17,8 @@ public class MovieService(IUnitOfWork unitOfWork, IMapper mapper, IGenreService 
         var movies = await unitOfWork.GetRepo<Movie, Guid>()
             .GetAllAsync(new MovieSpecifications(parameterSpecification));
         var result1 = mapper.Map<IEnumerable<ResponseMovieDto>>(movies);
-        var totalCount = await unitOfWork.GetRepo<Movie,Guid>().CountAsync(new MovieCountSpecification(parameterSpecification));
+        var totalCount = await unitOfWork.GetRepo<Movie, Guid>()
+            .CountAsync(new MovieCountSpecification(parameterSpecification));
         var finalResult = new PaginatedResult<ResponseMovieDto>(
             parameterSpecification.PageIndex,
             parameterSpecification.PageSize,
@@ -71,5 +73,45 @@ public class MovieService(IUnitOfWork unitOfWork, IMapper mapper, IGenreService 
         if (existingMovie == null) throw new Exception($"Movie with id {id} was not found");
         unitOfWork.GetRepo<Movie, Guid>().Delete(existingMovie);
         return await unitOfWork.SaveChangesAsync() > 0;
+    }
+
+    public async Task<ResponseMovieScheduleDto> CreateMovieFromExternal(JsonDocument json)
+    {
+        var root = json.RootElement;
+        if (root.TryGetProperty("Error", out var errorProperty))
+        {
+            throw new Exception($"Error from external API: {errorProperty.GetString()}");
+        }
+
+        var runtimeStr = root.GetProperty("Runtime").GetString();
+        int duration = 0;
+        if (!string.IsNullOrEmpty(runtimeStr))
+        {
+            int.TryParse(runtimeStr.Replace(" min", ""), out duration);
+        }
+
+        var ratingStr = root.GetProperty("imdbRating").GetString();
+        var rating = 0.0m;
+        if (!string.IsNullOrEmpty(ratingStr))
+        {
+            decimal.TryParse(ratingStr, out rating);
+        }
+
+        var releaseStr = root.GetProperty("Released").GetString();
+        var releaseDate = DateTime.MinValue;
+        if (!string.IsNullOrEmpty(releaseStr))
+        {
+            DateTime.TryParse(releaseStr, out releaseDate);
+        }
+
+        var dto = new CreateMovieDto
+        {
+            Name = root.GetProperty("Title").GetString()!,
+            Description = root.GetProperty("Plot").GetString()!,
+            DurationMinutes = duration,
+            Rating = rating,
+            ReleaseDate = releaseDate
+        };
+        return await CreateAsync(dto);
     }
 }

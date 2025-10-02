@@ -15,4 +15,10 @@
       <PackageReference Include="AutoMapper" Version="15.0.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Http.Results">
+        <HintPath>..\..\..\.nuget\packages\microsoft.aspnetcore.app.ref\8.0.20\ref\net8.0\Microsoft.AspNetCore.Http.Results.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

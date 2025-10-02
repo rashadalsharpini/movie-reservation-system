@@ -1,4 +1,3 @@
-using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Shared.Dtos;
