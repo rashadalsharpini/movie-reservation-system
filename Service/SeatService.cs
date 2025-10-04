@@ -8,10 +8,28 @@ namespace Service;
 
 public class SeatService(IUnitOfWork unitOfWork, IMapper mapper):ISeatService
 {
-    public async Task<IEnumerable<ResponseSeatDto>> GetAllSeatsAsync()
+    public Task<IEnumerable<ResponseSeatDto>> GetAllSeatsAsync(int scheduleId)
     {
-        var seats = await unitOfWork.GetRepo<Seat, int>().GetAllAsync();
-        var result = mapper.Map<IEnumerable<ResponseSeatDto>>(seats);
-        return result;
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> AreSeatsAvailableAsync(int scheduleId, List<int> seatIds)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task ReserveSeatAsync(int scheduleId, List<int> seatIds)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task ReleaseSeatAsync(int scheduleId, List<int> seatIds)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task ReleaseExpiredSeatsAsync()
+    {
+        throw new NotImplementedException();
     }
 }
