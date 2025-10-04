@@ -12,10 +12,6 @@ public class TicketConfiguration : IEntityTypeConfiguration<Ticket>
             .WithMany(s => s.Tickets)
             .HasForeignKey(t => t.SeatId)
             .OnDelete(DeleteBehavior.Restrict);
-        builder.HasOne(t => t.User)
-            .WithMany(u => u.Tickets)
-            .HasForeignKey(t => t.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(t => t.Schedule)
             .WithMany(s => s.Tickets)
