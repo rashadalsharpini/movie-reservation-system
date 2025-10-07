@@ -12,6 +12,6 @@ public class SeatReservation:BaseEntity<Guid>
     public Schedule Schedule { get; set; } = null!;
     public int ScheduleId { get; set; }
     public User User { get; set; } = null!;
-    public int UserId { get; set; }
-    
+    public string UserId { get; set; } 
+
 }

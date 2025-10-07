@@ -4,5 +4,5 @@ public class Payment:BaseEntity<Guid>
 {
     
     public Booking Booking { get; set; } = null!;
-    public int BookingId { get; set; }
+    public Guid BookingId { get; set; }
 }

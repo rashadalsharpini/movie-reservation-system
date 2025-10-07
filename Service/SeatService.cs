@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
@@ -32,9 +33,15 @@ public class SeatService(IUnitOfWork unitOfWork) : ISeatService
         return result;
     }
 
-    public Task<bool> AreSeatsAvailableAsync(int scheduleId, List<int> seatIds)
+    public async Task<bool> AreSeatsAvailableAsync(int scheduleId, List<int> seatIds)
     {
-        throw new NotImplementedException();
+        var seatReservationCheck = await unitOfWork.GetRepo<SeatReservation, Guid>().Queryable()
+            .AnyAsync(sr => sr.ScheduleId == scheduleId && seatIds.Contains(sr.SeatId));
+        if (!seatReservationCheck) return false;
+        var seatTicketCheck = await unitOfWork.GetRepo<Ticket, Guid>().Queryable()
+            .AnyAsync(t => t.ScheduleId == scheduleId && seatIds.Contains(t.SeatId));
+        if (!seatTicketCheck) return false;
+        return true;
     }
 
     public Task ReserveSeatAsync(int scheduleId, List<int> seatIds)
