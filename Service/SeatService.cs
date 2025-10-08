@@ -36,17 +36,30 @@ public class SeatService(IUnitOfWork unitOfWork) : ISeatService
     public async Task<bool> AreSeatsAvailableAsync(int scheduleId, List<int> seatIds)
     {
         var seatReservationCheck = await unitOfWork.GetRepo<SeatReservation, Guid>().Queryable()
-            .AnyAsync(sr => sr.ScheduleId == scheduleId && seatIds.Contains(sr.SeatId));
-        if (!seatReservationCheck) return false;
+            .AnyAsync(sr => sr.ScheduleId == scheduleId && seatIds.Contains(sr.SeatId)&&sr.ExpirationDate>DateTime.UtcNow);
+        if (seatReservationCheck) return false;
         var seatTicketCheck = await unitOfWork.GetRepo<Ticket, Guid>().Queryable()
-            .AnyAsync(t => t.ScheduleId == scheduleId && seatIds.Contains(t.SeatId));
-        if (!seatTicketCheck) return false;
+            .AnyAsync(t => t.ScheduleId == scheduleId && seatIds.Contains(t.SeatId)&&t.Booking.Status!=BookingStatus.Cancelled);
+        if (seatTicketCheck) return false;
         return true;
     }
 
-    public Task ReserveSeatAsync(int scheduleId, List<int> seatIds)
+    public async Task ReserveSeatAsync(int scheduleId, List<int> seatIds,string temporaryId)
     {
-        throw new NotImplementedException();
+        var availableSeats= await AreSeatsAvailableAsync(scheduleId, seatIds);
+        if(!availableSeats) throw new Exception("Seats are not available");
+        foreach (var seat in  seatIds)
+        {
+            var newReservationSeat = new SeatReservation()
+            {
+                TemporaryId = temporaryId,
+                SeatId = seat,
+                ScheduleId = scheduleId,
+                ExpirationDate = DateTime.UtcNow.AddMinutes(5),
+                ReservationDate = DateTime.UtcNow
+            };
+            await unitOfWork.GetRepo<SeatReservation,Guid>().AddAsync(newReservationSeat);
+        }
     }
 
     public Task ReleaseSeatAsync(int scheduleId, List<int> seatIds)
