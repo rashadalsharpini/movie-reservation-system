@@ -8,14 +8,14 @@ public class SeatReservationConfiguration:IEntityTypeConfiguration<SeatReservati
 {
     public void Configure(EntityTypeBuilder<SeatReservation> builder)
     {
-        builder.HasOne(sr => sr.User)
-            .WithMany(u => u.SeatReservations)
-            .HasForeignKey(sr => sr.UserId);
+        // builder.HasOne(sr => sr.User)
+        //     .WithMany(u => u.SeatReservations)
+        //     .HasForeignKey(sr => sr.UserId);
         builder.HasOne(sr => sr.Schedule)
             .WithMany(s => s.SeatReservations)
-            .HasForeignKey(sr => sr.ScheduleId);
+            .HasForeignKey(sr => sr.ScheduleId).OnDelete(DeleteBehavior.Cascade);
         builder.HasOne(sr=>sr.Seat)
             .WithMany(s=>s.SeatReservations)
-            .HasForeignKey(sr=>sr.SeatId);
+            .HasForeignKey(sr=>sr.SeatId).OnDelete(DeleteBehavior.Restrict);
     }
 }

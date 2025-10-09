@@ -9,7 +9,7 @@ public static class WebApplicationExtentions
         using var scop=app.Services.CreateScope();
         var dbInitializer = scop.ServiceProvider.GetRequiredService<IDataSeeding>();
         await dbInitializer.DataSeedAsync();
-        // await dbInitializer.IdentitySeedAsync();
+        await dbInitializer.IdentityDataSeedAsync();
         return app;
     }
 }

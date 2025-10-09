@@ -9,7 +9,7 @@ public class SeatReservation:BaseEntity<Guid>
     public int SeatId { get; set; }
     public Schedule Schedule { get; set; } = null!;
     public int ScheduleId { get; set; }
-    public User User { get; set; } = null!;
-    public string UserId { get; set; }
+    // public User User { get; set; } = null!;
+    // public string UserId { get; set; }
     
 }
