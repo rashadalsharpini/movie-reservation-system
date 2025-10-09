@@ -24,4 +24,8 @@
       <PackageReference Include="StackExchange.Redis" Version="2.9.11" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Data\DataSeeding\Seeds\" />
+    </ItemGroup>
+
 </Project>
