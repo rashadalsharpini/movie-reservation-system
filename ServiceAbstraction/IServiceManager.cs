@@ -6,4 +6,5 @@ public interface IServiceManager
     public IGenreService GenreService { get; }
     public ISeatService SeatService { get; }
     public IScheduleService ScheduleService { get; }
+    public ICacheService CacheService { get; }
 }

@@ -13,7 +13,7 @@ public class Movie : BaseEntity<Guid>
     public int DurationMinutes { get; set; }
     [Precision(5,2)]
     public decimal Rating { get; set; }
-    public DateTime ReleaseDate { get; set; }
+    public DateOnly ReleaseDate { get; set; }
     public ICollection<Genre> Genres { get; set; } = new List<Genre>();
     public ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
 }

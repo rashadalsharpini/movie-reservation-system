@@ -20,6 +20,8 @@ public static class AppServiceRegistration
         services.AddScoped<Func<IScheduleService>>(sp => sp.GetRequiredService<IScheduleService>);
         services.AddScoped<ISeatService, SeatService>();
         services.AddScoped<IScheduleService, ScheduleService>();
+        services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<Func<ICacheService>>(sp => sp.GetRequiredService<ICacheService>);
         services.AddScoped<IServiceManager, ServiceManager>();
         return services;
     }

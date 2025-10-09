@@ -12,7 +12,7 @@ public class UpdateMovieDto
 
     [Range(0, 10)] public decimal? Rating { get; set; }
 
-    [DataType(DataType.Date)] public DateTime? ReleaseDate { get; set; }
+    [DataType(DataType.Date)] public DateOnly? ReleaseDate { get; set; }
 
     public List<string>? GenreNames { get; set; } = new List<string>();
 }

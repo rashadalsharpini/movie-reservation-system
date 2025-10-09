@@ -98,10 +98,10 @@ public class MovieService(IUnitOfWork unitOfWork, IMapper mapper, IGenreService 
         }
 
         var releaseStr = root.GetProperty("Released").GetString();
-        var releaseDate = DateTime.MinValue;
+        var releaseDate = DateOnly.MinValue;
         if (!string.IsNullOrEmpty(releaseStr))
         {
-            DateTime.TryParse(releaseStr, out releaseDate);
+            DateOnly.TryParse(releaseStr, out releaseDate);
         }
 
         var dto = new CreateMovieDto

@@ -1,4 +1,6 @@
 using Domain.Contracts;
+using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +29,7 @@ public static class InfrastructureRegistration
         {
             opt.UseSqlServer(configuration.GetConnectionString("IdentityConnection"));
         });
+        services.AddIdentityCore<User>().AddRoles<IdentityRole>().AddEntityFrameworkStores<MovieIdentityDbContext>();
         return services;
     }
 }

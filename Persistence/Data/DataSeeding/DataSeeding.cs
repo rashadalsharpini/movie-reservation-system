@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Domain.Contracts;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -8,6 +9,9 @@ namespace Persistence.Data.DataSeeding;
 
 public class DataSeeding(
     MovieDbContext db,
+    MovieIdentityDbContext identityDb,
+    UserManager<User> userManager,
+    RoleManager<IdentityRole> roleManager,
     ILogger<DataSeeding> logger) : IDataSeeding
 {
     public async Task DataSeedAsync()
@@ -15,7 +19,7 @@ public class DataSeeding(
         try
         {
             var solutionDir = Path.Combine(AppContext.BaseDirectory, @"../../../..");
-            if (!(await db.Database.GetPendingMigrationsAsync()).Any())
+            if ((await db.Database.GetPendingMigrationsAsync()).Any())
             {
                 await db.Database.MigrateAsync();
                 if (!db.Cinema.Any())
@@ -25,8 +29,10 @@ public class DataSeeding(
                     var cinemas = await JsonSerializer.DeserializeAsync<List<Cinema>>(cinemaData,
                         new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (cinemas is not null && cinemas.Any())
+                    {
                         await db.Cinema.AddRangeAsync(cinemas);
-                    await db.SaveChangesAsync();
+                        await db.SaveChangesAsync();
+                    }
                 }
 
                 if (!db.Genres.Any())
@@ -142,8 +148,49 @@ public class DataSeeding(
         }
     }
 
-    public Task IdentitySeedAsync()
+
+    public async Task IdentityDataSeedAsync()
     {
-        throw new NotImplementedException();
+        try
+        {
+            var pendingMigrations = await identityDb.Database.GetPendingMigrationsAsync();
+            if (pendingMigrations.Any())
+                await identityDb.Database.MigrateAsync();
+            if (!roleManager.Roles.Any())
+            {
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+                await roleManager.CreateAsync(new IdentityRole("Supervisor"));
+            }
+
+            if (!userManager.Users.Any())
+            {
+                var user01 = new User()
+                {
+                    Email = "rashad@gmail.com",
+                    DisplayName = "rashad",
+                    UserName = "rashad",
+                    PhoneNumber = "1234567890"
+                };
+                var user02 = new User()
+                {
+                    Email = "sayed@gmail.com",
+                    DisplayName = "sayed",
+                    UserName = "sayed",
+                    PhoneNumber = "1234567890"
+                };
+                await userManager.CreateAsync(user01, "P@ssw0rd");
+                await userManager.CreateAsync(user02, "P@ssw0rd");
+                await userManager.AddToRoleAsync(user01, "Admin");
+                await userManager.AddToRoleAsync(user02, "Supervisor");
+            }
+
+            await identityDb.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e.Message);
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
