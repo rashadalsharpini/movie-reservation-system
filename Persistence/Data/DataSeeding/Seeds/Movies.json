@@ -1,42 +1,50 @@
 [
   {
-    "Id": "a1111111-1111-1111-1111-111111111111",
-    "Name": "Inception",
-    "Description": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O.",
-    "ReleaseDate": "2010-07-16T00:00:00",
-    "Rating": 8.8,
-    "DurationMinutes": 148
+    "id": "33345678-1234-1234-1234-123456789001",
+    "name": "The Matrix Resurrections",
+    "description": "Return to the reality-bending universe of The Matrix.",
+    "durationMinutes": 148,
+    "rating": 7.5,
+    "releaseDate": "2021-12-22",
+    "genreIds": [
+      "22345678-1234-1234-1234-123456789001",
+      "22345678-1234-1234-1234-123456789004"
+    ]
   },
   {
-    "Id": "a2222222-2222-2222-2222-222222222222",
-    "Name": "Interstellar",
-    "Description": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
-    "ReleaseDate": "2014-11-07T00:00:00",
-    "Rating": 8.6,
-    "DurationMinutes": 169
+    "id": "33345678-1234-1234-1234-123456789002",
+    "name": "Dune: Part Two",
+    "description": "Paul Atreides continues his journey on the desert planet Arrakis.",
+    "durationMinutes": 166,
+    "rating": 8.8,
+    "releaseDate": "2024-03-01",
+    "genreIds": [
+      "22345678-1234-1234-1234-123456789004",
+      "22345678-1234-1234-1234-123456789008"
+    ]
   },
   {
-    "Id": "a3333333-3333-3333-3333-333333333333",
-    "Name": "The Dark Knight",
-    "Description": "When a menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham.",
-    "ReleaseDate": "2008-07-18T00:00:00",
-    "Rating": 9.0,
-    "DurationMinutes": 152
+    "id": "33345678-1234-1234-1234-123456789003",
+    "name": "No Time To Die",
+    "description": "James Bond's final mission as 007.",
+    "durationMinutes": 163,
+    "rating": 7.3,
+    "releaseDate": "2021-09-30",
+    "genreIds": [
+      "22345678-1234-1234-1234-123456789001",
+      "22345678-1234-1234-1234-123456789007"
+    ]
   },
   {
-    "Id": "a4444444-4444-4444-4444-444444444444",
-    "Name": "Titanic",
-    "Description": "A seventeen-year-old aristocrat falls in love with a kind but poor artist aboard the luxurious, ill-fated R.M.S. Titanic.",
-    "ReleaseDate": "1997-12-19T00:00:00",
-    "Rating": 7.9,
-    "DurationMinutes": 195
-  },
-  {
-    "Id": "a5555555-5555-5555-5555-555555555555",
-    "Name": "Avengers: Endgame",
-    "Description": "After the devastating events of Infinity War, the Avengers assemble once more to reverse Thanos' actions and restore balance to the universe.",
-    "ReleaseDate": "2019-04-26T00:00:00",
-    "Rating": 8.4,
-    "DurationMinutes": 181
+    "id": "33345678-1234-1234-1234-123456789004",
+    "name": "Spider-Man: No Way Home",
+    "description": "Peter Parker seeks help from Doctor Strange to restore his secret.",
+    "durationMinutes": 148,
+    "rating": 8.2,
+    "releaseDate": "2021-12-17",
+    "genreIds": [
+      "22345678-1234-1234-1234-123456789001",
+      "22345678-1234-1234-1234-123456789008"
+    ]
   }
 ]

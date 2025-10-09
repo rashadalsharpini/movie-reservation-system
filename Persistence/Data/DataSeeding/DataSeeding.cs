@@ -22,7 +22,8 @@ public class DataSeeding(
                 {
                     var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Cinema.json");
                     var cinemaData = File.OpenRead(data);
-                    var cinemas = await JsonSerializer.DeserializeAsync<List<Cinema>>(cinemaData);
+                    var cinemas = await JsonSerializer.DeserializeAsync<List<Cinema>>(cinemaData,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (cinemas is not null && cinemas.Any())
                         await db.Cinema.AddRangeAsync(cinemas);
                     await db.SaveChangesAsync();
@@ -32,7 +33,8 @@ public class DataSeeding(
                 {
                     var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Genres.json");
                     var genresData = File.OpenRead(data);
-                    var genres = await JsonSerializer.DeserializeAsync<List<Genre>>(genresData);
+                    var genres = await JsonSerializer.DeserializeAsync<List<Genre>>(genresData,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (genres is not null && genres.Any())
                     {
                         await db.Genres.AddRangeAsync(genres);
@@ -44,7 +46,8 @@ public class DataSeeding(
                 {
                     var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Movies.json");
                     var moviesData = File.OpenRead(data);
-                    var movies = await JsonSerializer.DeserializeAsync<List<Movie>>(moviesData);
+                    var movies = await JsonSerializer.DeserializeAsync<List<Movie>>(moviesData,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (movies is not null && movies.Any())
                     {
                         await db.Movies.AddRangeAsync(movies);
@@ -56,7 +59,8 @@ public class DataSeeding(
                 {
                     var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Halls.json");
                     var hallsData = File.OpenRead(data);
-                    var halls = await JsonSerializer.DeserializeAsync<List<Hall>>(hallsData);
+                    var halls = await JsonSerializer.DeserializeAsync<List<Hall>>(hallsData,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (halls is not null && halls.Any())
                     {
                         await db.Halls.AddRangeAsync(halls);
@@ -68,7 +72,8 @@ public class DataSeeding(
                 {
                     var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Seats.json");
                     var seatsData = File.OpenRead(data);
-                    var seats = await JsonSerializer.DeserializeAsync<List<Seat>>(seatsData);
+                    var seats = await JsonSerializer.DeserializeAsync<List<Seat>>(seatsData,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (seats is not null && seats.Any())
                     {
                         await db.Seats.AddRangeAsync(seats);
@@ -80,10 +85,50 @@ public class DataSeeding(
                 {
                     var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Schedules.json");
                     var schedulesData = File.OpenRead(data);
-                    var schedules = await JsonSerializer.DeserializeAsync<List<Schedule>>(schedulesData);
+                    var schedules = await JsonSerializer.DeserializeAsync<List<Schedule>>(schedulesData,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                     if (schedules is not null && schedules.Any())
                     {
                         await db.Schedules.AddRangeAsync(schedules);
+                        await db.SaveChangesAsync();
+                    }
+                }
+
+                if (!db.Bookings.Any())
+                {
+                    var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Booking.json");
+                    var bookingData = File.OpenRead(data);
+                    var booking = await JsonSerializer.DeserializeAsync<List<Booking>>(bookingData,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    if (booking is not null && booking.Any())
+                    {
+                        await db.Bookings.AddRangeAsync(booking);
+                        await db.SaveChangesAsync();
+                    }
+                }
+
+                if (!db.SeatReservations.Any())
+                {
+                    var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/SeatReservation.json");
+                    var seatReservationData = File.OpenRead(data);
+                    var seatReservation = await JsonSerializer.DeserializeAsync<List<SeatReservation>>(
+                        seatReservationData, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    if (seatReservation is not null && seatReservation.Any())
+                    {
+                        await db.SeatReservations.AddRangeAsync(seatReservation);
+                        await db.SaveChangesAsync();
+                    }
+                }
+
+                if (!db.Tickets.Any())
+                {
+                    var data = Path.Combine(solutionDir, "Persistence/Data/DataSeeding/Seeds/Ticket.json");
+                    var ticketData = File.OpenRead(data);
+                    var ticket = await JsonSerializer.DeserializeAsync<List<Ticket>>(ticketData,
+                        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    if (ticket is not null && ticket.Any())
+                    {
+                        await db.Tickets.AddRangeAsync(ticket);
                         await db.SaveChangesAsync();
                     }
                 }

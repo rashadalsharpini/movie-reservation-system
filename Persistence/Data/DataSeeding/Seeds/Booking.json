@@ -1,0 +1,18 @@
+[
+  {
+    "id": "44445678-1234-1234-1234-123456789001",
+    "bookingDate": "2024-01-15T10:30:00",
+    "totalPrice": 31.00,
+    "status": "Confirmed",
+    "confirmationNumber": "CNF-001",
+    "userId": "user-001"
+  },
+  {
+    "id": "44445678-1234-1234-1234-123456789002",
+    "bookingDate": "2024-01-16T14:45:00",
+    "totalPrice": 24.00,
+    "status": "Pending",
+    "confirmationNumber": "CNF-002",
+    "userId": "user-002"
+  }
+]
