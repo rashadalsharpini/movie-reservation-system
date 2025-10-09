@@ -15,10 +15,25 @@ public class SeatController(IServiceManager serviceManager) : ApiBaseController
         return Ok(result);
     }
 
-    [HttpPost]
-    public async Task<ActionResult> ReserveSeatAsync(int scheduleId, List<int> seatIds, string temporaryId)
+    [HttpPost("CheckSeatAvailability")]
+    public async Task<ActionResult<bool>> AreSeatsAvailableAsync(int scheduleId, [FromBody] List<int> seatIds)
+    {
+        var areAvailable =await serviceManager.SeatService.AreSeatsAvailableAsync(scheduleId, seatIds);
+        return Ok(areAvailable);
+    }
+
+    [HttpPost("ReserveSeat")]
+    public async Task<ActionResult> ReserveSeatAsync(int scheduleId, [FromBody]List<int> seatIds, string temporaryId)
     {
         await serviceManager.SeatService.ReserveSeatAsync(scheduleId, seatIds, temporaryId);
-        return Ok();
+        return Ok(new {message="Seats reserved successfully"});
     }
+
+    [HttpPost]
+    public async Task<ActionResult> ReleaseSeatAsync(int scheduleId, [FromBody] List<int> seatIds)
+    {
+        await serviceManager.SeatService.ReleaseSeatAsync(scheduleId, seatIds);
+        return Ok(new {message="Seats released successfully"});
+    }
+    
 }

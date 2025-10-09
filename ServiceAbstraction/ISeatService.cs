@@ -8,5 +8,4 @@ public interface ISeatService
     Task<bool> AreSeatsAvailableAsync(int scheduleId,List<int> seatIds);
     Task ReserveSeatAsync(int scheduleId, List<int> seatIds,string temporaryId);
     Task ReleaseSeatAsync(int scheduleId, List<int> seatIds);
-    Task ReleaseExpiredSeatsAsync();
 }
