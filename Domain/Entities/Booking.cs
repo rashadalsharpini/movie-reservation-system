@@ -1,6 +1,6 @@
 namespace Domain.Entities;
 
-public class Booking:BaseEntity<Guid>
+public class Booking:BaseEntity<int>
 {
     public DateTime BookingDate { get; set; }=DateTime.UtcNow;
     public decimal TotalPrice { get; set; }

@@ -7,11 +7,11 @@ public class MovieParameterSpecification
     public string? Search { get; set; }
     public string? Genre { get; set; } 
     public decimal? Rating  { get; set; }
-    public DateTime? ExactReleaseDate { get; set; }
+    public DateOnly? ExactReleaseDate { get; set; }
     
-    public DateTime? MinReleaseDate { get; set; }
+    public DateOnly? MinReleaseDate { get; set; }
     
-    public DateTime? MaxReleaseDate { get; set; }
+    public DateOnly? MaxReleaseDate { get; set; }
     public MovieSortOptions? Sort   { get; set; }
     public int PageIndex { get; set; } = 1;
     private int _pageSize=DefaultPageSize;

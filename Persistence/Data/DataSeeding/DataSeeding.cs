@@ -24,8 +24,10 @@ public class DataSeeding(
                     var cinemaData = File.OpenRead(data);
                     var cinemas = await JsonSerializer.DeserializeAsync<List<Cinema>>(cinemaData);
                     if (cinemas is not null && cinemas.Any())
+                    {
                         await db.Cinema.AddRangeAsync(cinemas);
-                    await db.SaveChangesAsync();
+                        await db.SaveChangesAsync();
+                    }
                 }
 
                 if (!db.Genres.Any())

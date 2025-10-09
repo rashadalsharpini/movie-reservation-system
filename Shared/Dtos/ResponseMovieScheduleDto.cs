@@ -12,7 +12,7 @@ public class ResponseMovieScheduleDto
     
     public decimal Rating { get; set; }
     
-    public DateTime ReleaseDate { get; set; }
+    public DateOnly ReleaseDate { get; set; }
     
     public List<string> Genres { get; set; } = null!;
     public ICollection<ScheduleDto> Schedules { get; set; } = new List<ScheduleDto>();
