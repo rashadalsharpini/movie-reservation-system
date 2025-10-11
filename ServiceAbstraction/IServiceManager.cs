@@ -7,4 +7,6 @@ public interface IServiceManager
     public ISeatService SeatService { get; }
     public IScheduleService ScheduleService { get; }
     public ICacheService CacheService { get; }
+    public IEmailService EmailService { get; }
+    public IAuthenticationService AuthenticationService { get; }
 }

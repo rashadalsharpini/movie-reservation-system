@@ -16,12 +16,16 @@ public static class AppServiceRegistration
         services.AddScoped<Func<IMovieService>>(sp => sp.GetRequiredService<IMovieService>);
         services.AddScoped<IGenreService, GenreService>();
         services.AddScoped<Func<IGenreService>>(sp => sp.GetRequiredService<IGenreService>);
-        services.AddScoped<Func<ISeatService>>(sp => sp.GetRequiredService<ISeatService>);
-        services.AddScoped<Func<IScheduleService>>(sp => sp.GetRequiredService<IScheduleService>);
         services.AddScoped<ISeatService, SeatService>();
+        services.AddScoped<Func<ISeatService>>(sp => sp.GetRequiredService<ISeatService>);
         services.AddScoped<IScheduleService, ScheduleService>();
+        services.AddScoped<Func<IScheduleService>>(sp => sp.GetRequiredService<IScheduleService>);
         services.AddScoped<ICacheService, CacheService>();
         services.AddScoped<Func<ICacheService>>(sp => sp.GetRequiredService<ICacheService>);
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<Func<IEmailService>>(sp => sp.GetRequiredService<IEmailService>);
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<Func<IAuthenticationService>>(sp => sp.GetRequiredService<IAuthenticationService>);
         services.AddScoped<IServiceManager, ServiceManager>();
         return services;
     }
