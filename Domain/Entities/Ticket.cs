@@ -10,6 +10,6 @@ public class Ticket : BaseEntity<Guid>
     public int ScheduleId { get; set; }
     public Schedule Schedule { get; set; } = null!;
     public Booking Booking { get; set; } = null!;
-    public Guid BookingId { get; set; }
+    public int BookingId { get; set; }
     
 }
