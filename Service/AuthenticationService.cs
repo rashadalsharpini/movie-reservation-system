@@ -21,13 +21,16 @@ public class AuthenticationService(
         var isPassword = await userManager.CheckPasswordAsync(user, dto.Password);
         if (!isPassword) throw new Exception("Invalid password");
         user.RefreshTokens = user.RefreshTokens.Where(t => t.Expires >= DateTime.UtcNow).ToList();
+        var existingToken = user.RefreshTokens.FirstOrDefault(t => t.DeviceId == dto.DeviceId);
+        if (existingToken != null) user.RefreshTokens.Remove(existingToken);
         var accessToken = await tokenProvider.GenerateAccessToken(user);
         var refreshToken = tokenProvider.GenerateRefreshToken();
         var refresh = new RefreshToken()
         {
             Token = refreshToken,
             Expires = DateTime.UtcNow.AddHours(1),
-            UserId = user.Id
+            UserId = user.Id,
+            DeviceId = dto.DeviceId
         };
         user.RefreshTokens.Add(refresh);
         await userManager.UpdateAsync(user);

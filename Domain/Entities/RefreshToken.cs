@@ -7,4 +7,7 @@ public class RefreshToken
     public DateTime Expires { get; set; }
     public User User { get; set; } = null!;
     public string UserId { get; set; } = null!;
+    public string DeviceId { get; set; } = null!;
+    public bool IsRevoked { get; set; } = false;
+    public DateTime? RevokedAt { get; set; }
 }
