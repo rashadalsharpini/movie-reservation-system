@@ -1,9 +1,12 @@
+using Domain.Contracts;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using ServiceAbstraction;
 using Shared.Dtos;
 
 namespace Service;
 
-public class BookingService:IBookingService
+public class BookingService(IUnitOfWork unitOfWork):IBookingService
 {
     public Task<BookingResponseDto> CreateBookingAsync(CreateBookingDto dto)
     {
@@ -30,9 +33,11 @@ public class BookingService:IBookingService
         throw new NotImplementedException();
     }
 
-    public Task<decimal> CalculateTotalPriceAsync(int scheduleId, List<int> seatIds)
+    public async Task<decimal> CalculateTotalPriceAsync(int scheduleId, List<int> seatIds)
     {
-        throw new NotImplementedException();
+        var schedulePrice =await unitOfWork.GetRepo<Schedule, int>().GetByIdAsync(scheduleId);
+        if(schedulePrice == null) throw new Exception("Schedule id is not found");
+        return schedulePrice.BasePrice*seatIds.Count;
     }
 
     public Task ConfirmBookingAsync(Guid bookingId)
