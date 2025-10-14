@@ -19,6 +19,7 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddInfrastructure(builder.Configuration);
         builder.Services.AddAppServices();
+        builder.Services.AddJwtService(builder.Configuration);
 
         var app = builder.Build();
        await app.SeedDbInitializeAsync();

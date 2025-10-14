@@ -1,12 +1,20 @@
+using System.Text;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using ServiceAbstraction;
 
 namespace Service;
 
 public static class AppServiceRegistration
 {
+    private static readonly IConfiguration Configuration =
+        new ConfigurationBuilder().AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
+            .Build();
+
     public static IServiceCollection AddAppServices(this IServiceCollection services)
     {
         // https://docs.automapper.io/en/stable/Configuration.html
@@ -27,6 +35,34 @@ public static class AppServiceRegistration
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<Func<IAuthenticationService>>(sp => sp.GetRequiredService<IAuthenticationService>);
         services.AddScoped<IServiceManager, ServiceManager>();
+
+
+        return services;
+    }
+
+    public static IServiceCollection AddJwtService(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddAuthentication(opt =>
+        {
+            opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(opt =>
+        {
+            opt.RequireHttpsMetadata = false;
+            opt.SaveToken = true;
+            opt.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidIssuer = Configuration["JWTSettings:Issuer"],
+                ValidAudience = Configuration["JWTSettings:Audience"],
+                IssuerSigningKey =
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSettings:SecretKey"]!)),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true
+            };
+        });
         return services;
     }
 }
