@@ -8,4 +8,6 @@ public interface IAuthenticationService
     Task<UserDto> RegisterAsync(RegisterDto dto);
     Task ForgotPasswordAsync(ForgotPasswordDto dto);
     Task ResetPasswordAsync(ResetPasswordDto dto);
+    Task<UserDto> RefreshTokenAsync(string refreshToken);
+    Task RevokeRefreshTokenAsync(string refreshToken);
 }
