@@ -32,6 +32,7 @@ public static class AppServiceRegistration
         services.AddScoped<Func<ICacheService>>(sp => sp.GetRequiredService<ICacheService>);
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<Func<IEmailService>>(sp => sp.GetRequiredService<IEmailService>);
+        services.AddScoped<TokenProvider>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<Func<IAuthenticationService>>(sp => sp.GetRequiredService<IAuthenticationService>);
         services.AddScoped<IServiceManager, ServiceManager>();
