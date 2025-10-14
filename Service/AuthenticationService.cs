@@ -1,11 +1,7 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using AutoMapper;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using ServiceAbstraction;
 using Shared.Dtos;
 
@@ -14,23 +10,34 @@ namespace Service;
 public class AuthenticationService(
     UserManager<User> userManager,
     IConfiguration configuration,
-    IMapper mapper,
-    IEmailService emailService)
+    IEmailService emailService,
+    TokenProvider tokenProvider)
     : IAuthenticationService
 {
     public async Task<UserDto> LoginAsync(LoginDto dto)
     {
         var user = await userManager.FindByEmailAsync(dto.Email) ??
-                   throw new Exception("Invalid email or password");
+                   throw new Exception("Invalid email");
         var isPassword = await userManager.CheckPasswordAsync(user, dto.Password);
-        if (isPassword)
-            return new UserDto()
-            {
-                DisplayName = user.DisplayName,
-                Email = user.Email!,
-                Token = await GenerateToken(user)
-            };
-        throw new Exception("Invalid email or password");
+        if (!isPassword) throw new Exception("Invalid password");
+        user.RefreshTokens = user.RefreshTokens.Where(t => t.Expires >= DateTime.UtcNow).ToList();
+        var accessToken = await tokenProvider.GenerateAccessToken(user);
+        var refreshToken = tokenProvider.GenerateRefreshToken();
+        var refresh = new RefreshToken()
+        {
+            Token = refreshToken,
+            Expires = DateTime.UtcNow.AddHours(1),
+            UserId = user.Id
+        };
+        user.RefreshTokens.Add(refresh);
+        await userManager.UpdateAsync(user);
+        return new UserDto()
+        {
+            DisplayName = user.DisplayName,
+            Email = user.Email!,
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+        };
     }
 
 
@@ -49,7 +56,7 @@ public class AuthenticationService(
         {
             DisplayName = dto.DisplayName,
             Email = dto.Email,
-            Token = await GenerateToken(user)
+            AccessToken = await tokenProvider.GenerateAccessToken(user)
         };
     }
 
@@ -75,27 +82,48 @@ public class AuthenticationService(
         if (!res.Succeeded) throw new Exception(res.Errors.First().Description);
     }
 
-    private async Task<string> GenerateToken(User user)
+    public async Task<UserDto> RefreshTokenAsync(string refreshToken)
     {
-        var claims = new List<Claim>()
+        var user = userManager.Users
+                       .Include(u => u.RefreshTokens)
+                       .FirstOrDefault(u => u.RefreshTokens.Any(t => t.Token == refreshToken))
+                   ?? throw new Exception("Invalid refresh token");
+
+        var existingToken = user.RefreshTokens.First(t => t.Token == refreshToken);
+
+        if (existingToken.Expires < DateTime.UtcNow)
+            throw new Exception("Refresh token expired");
+
+        user.RefreshTokens.Remove(existingToken);
+
+        var newAccessToken = await tokenProvider.GenerateAccessToken(user);
+        var newRefreshToken = tokenProvider.GenerateRefreshToken();
+
+        user.RefreshTokens.Add(new RefreshToken
         {
-            new Claim(ClaimTypes.Email, user.Email!),
-            new Claim(ClaimTypes.Name, user.UserName!),
-            new Claim(ClaimTypes.NameIdentifier, user.Id)
+            Token = newRefreshToken,
+            Expires = DateTime.UtcNow.AddDays(7),
+            UserId = user.Id
+        });
+
+        await userManager.UpdateAsync(user);
+
+        return new UserDto
+        {
+            DisplayName = user.DisplayName,
+            Email = user.Email!,
+            AccessToken = newAccessToken,
+            RefreshToken = newRefreshToken
         };
-        var roles = await userManager.GetRolesAsync(user);
-        foreach (var role in roles)
-            claims.Add(new Claim(ClaimTypes.Role, role));
-        var secretKey = configuration["JWTSettings:SecretKey"];
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var token = new JwtSecurityToken(
-            issuer: configuration["JWTSettings:Issuer"],
-            audience: configuration["JWTSettings:Audience"],
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(15),
-            signingCredentials: creds
-        );
-        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public async Task RevokeRefreshTokenAsync(string refreshToken)
+    {
+        var user = await userManager.Users.Include(u => u.RefreshTokens)
+                       .FirstOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == refreshToken)) ??
+                   throw new Exception("Invalid refresh token");
+        var token = user.RefreshTokens.First(t => t.Token == refreshToken);
+        user.RefreshTokens.Remove(token);
+        await userManager.UpdateAsync(user);
     }
 }
