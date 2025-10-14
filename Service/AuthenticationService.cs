@@ -17,8 +17,10 @@ public class AuthenticationService(
     public async Task<UserDto> LoginAsync(LoginDto dto)
     {
         var user = await userManager.FindByEmailAsync(dto.Email) ??
-                   throw new Exception("Invalid email or password");
+                   throw new Exception("Invalid email");
         var isPassword = await userManager.CheckPasswordAsync(user, dto.Password);
+        if (!isPassword) throw new Exception("Invalid password");
+        user.RefreshTokens = user.RefreshTokens.Where(t => t.Expires >= DateTime.UtcNow).ToList();
         var accessToken = await tokenProvider.GenerateAccessToken(user);
         var refreshToken = tokenProvider.GenerateRefreshToken();
         var refresh = new RefreshToken()
@@ -29,15 +31,13 @@ public class AuthenticationService(
         };
         user.RefreshTokens.Add(refresh);
         await userManager.UpdateAsync(user);
-        if (isPassword)
-            return new UserDto()
-            {
-                DisplayName = user.DisplayName,
-                Email = user.Email!,
-                AccessToken = accessToken,
-                RefreshToken = refreshToken,
-            };
-        throw new Exception("Invalid email or password");
+        return new UserDto()
+        {
+            DisplayName = user.DisplayName,
+            Email = user.Email!,
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
+        };
     }
 
 
