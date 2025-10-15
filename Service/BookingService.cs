@@ -8,11 +8,36 @@ using Shared.Dtos;
 
 namespace Service;
 
-public class BookingService(IUnitOfWork unitOfWork, IMapper mapper) : IBookingService
+public class BookingService(IUnitOfWork unitOfWork, IMapper mapper,ServiceManager serviceManager) : IBookingService
 {
-    public Task<BookingResponseDto> CreateBookingAsync(CreateBookingDto dto)
+    public async Task<BookingDetailsDto> CreateBookingAsync(int scheduleId, List<int> seatIds,string temporaryId)
     {
-        throw new NotImplementedException();
+        if(scheduleId <=0) throw new Exception("Invalid scheduleId");
+        if(seatIds==null||!seatIds.Any()) throw new Exception("no seats selected");
+        var availabilitySeats = await serviceManager.SeatService.AreSeatsAvailableAsync(scheduleId, seatIds);
+        if(!availabilitySeats) throw new Exception("Seats is not available");
+        await serviceManager.SeatService.ReserveSeatAsync(scheduleId,seatIds,temporaryId);
+        var totalPrice= await CalculateTotalPriceAsync(scheduleId, seatIds);
+        var newbooking = new Booking()
+        {
+            BookingDate = DateTime.UtcNow,
+            TotalPrice = totalPrice,
+            Status = BookingStatus.Pending,
+            ConfirmationNumber = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper()
+        };
+        foreach (var seat in seatIds)
+        {
+            var ticket = new Ticket()
+            {
+                Price = totalPrice / seatIds.Count,
+                SeatId = seat,
+                ScheduleId = scheduleId
+            };
+            newbooking.Tickets.Add(ticket);
+        }
+        await unitOfWork.GetRepo<Booking,int>().AddAsync(newbooking);
+        await unitOfWork.SaveChangesAsync();
+        return await GetBookingByIdAsync(newbooking.Id);
     }
 
     public async Task<BookingDetailsDto> GetBookingByIdAsync(int bookingId)
@@ -30,8 +55,8 @@ public class BookingService(IUnitOfWork unitOfWork, IMapper mapper) : IBookingSe
     public async Task<IEnumerable<BookingDto>> GetAllBookingsAsync()
     {
         // ** Ya Rashade **
-        //this method is not completed yest because it need to use specification and also pagination and don't forget to upload includs with bookings
-        // and you can make the includs here in the service but put it in specification 
+        //this method is not completed yet because it need to using specification and also pagination and don't forget to upload includs with bookings
+        // and you can make the includs here in the service but put it in specification for clean code
         var bookings = await unitOfWork.GetRepo<Booking, int>().GetAllAsync();
         var result = mapper.Map<IEnumerable<BookingDto>>(bookings);
         return result;
