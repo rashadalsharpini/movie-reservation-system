@@ -13,6 +13,8 @@ public class BaseSpecifications<TEntity, TKey> : ISpecifications<TEntity, TKey> 
 
     public Expression<Func<TEntity, bool>>? Criteria { get; private set; }
     public List<Expression<Func<TEntity, object>>>? Includes { get; } = [];
+    
+    public List<Func<IQueryable<TEntity>, IQueryable<TEntity>>> IncludeExpressions { get; } = [];
     public Expression<Func<TEntity, object>>? OrderBy { get; private set; }
     public Expression<Func<TEntity, object>>? OrderByDescending { get; private set; }
 
@@ -24,7 +26,10 @@ public class BaseSpecifications<TEntity, TKey> : ISpecifications<TEntity, TKey> 
 
     protected void AddInclude(Expression<Func<TEntity, object>> include)
         => Includes!.Add(include);
-    
+
+    protected void AddIncludeExpressions(Func<IQueryable<TEntity>, IQueryable<TEntity>> includeExpression)
+        => IncludeExpressions.Add(includeExpression);
+
     public int Take { get; private set; }
     public int Skip { get; private set; }
     public bool IsPagination { get; set; }

@@ -2,6 +2,7 @@ using AutoMapper;
 using Domain.Contracts;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Service.Specifications;
 using ServiceAbstraction;
 using Shared.Dtos;
 
@@ -14,9 +15,11 @@ public class BookingService(IUnitOfWork unitOfWork, IMapper mapper) : IBookingSe
         throw new NotImplementedException();
     }
 
-    public Task<BookingDetailsDto> GetBookingByIdAsync(Guid bookingId)
+    public async Task<BookingDetailsDto> GetBookingByIdAsync(int bookingId)
     {
-        throw new NotImplementedException();
+        var booking = await unitOfWork.GetRepo<Booking, int>().GetByIdAsync(new BookingSpecifications(bookingId));
+        var result= mapper.Map<BookingDetailsDto>(booking);
+        return result;
     }
 
     public Task<List<BookingHistoryDto>> GetUserBookingsAsync(string userId)
@@ -26,6 +29,9 @@ public class BookingService(IUnitOfWork unitOfWork, IMapper mapper) : IBookingSe
 
     public async Task<IEnumerable<BookingDto>> GetAllBookingsAsync()
     {
+        // ** Ya Rashade **
+        //this method is not completed yest because it need to use specification and also pagination and don't forget to upload includs with bookings
+        // and you can make the includs here in the service but put it in specification 
         var bookings = await unitOfWork.GetRepo<Booking, int>().GetAllAsync();
         var result = mapper.Map<IEnumerable<BookingDto>>(bookings);
         return result;
