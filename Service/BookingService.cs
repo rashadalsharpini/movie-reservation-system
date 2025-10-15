@@ -59,9 +59,15 @@ public class BookingService(IUnitOfWork unitOfWork, IMapper mapper,ServiceManage
         return result;
     }
 
-    public Task<bool> CancelBookingAsync(Guid bookingId)
+    public async Task<bool> CancelBookingAsync(int bookingId)
     {
-        throw new NotImplementedException();
+        var booking = await unitOfWork.GetRepo<Booking, int>().GetByIdAsync(bookingId);
+        if(booking==null) throw new Exception("Booking with this id is not found");
+        booking.Status = BookingStatus.Cancelled;
+        var scheduleId = booking.Tickets.First().ScheduleId;
+        var seatsId = booking.Tickets.Select(t => t.SeatId).ToList();
+        await serviceManager.SeatService.ReleaseSeatAsync(scheduleId, seatsId);
+       return await unitOfWork.SaveChangesAsync()>0;
     }
 
     public async Task<decimal> CalculateTotalPriceAsync(int scheduleId, List<int> seatIds)
@@ -74,6 +80,7 @@ public class BookingService(IUnitOfWork unitOfWork, IMapper mapper,ServiceManage
     public async Task ConfirmBookingAsync(int bookingId)
     {
         var booking = await unitOfWork.GetRepo<Booking, int>().GetByIdAsync(bookingId);
+        if(booking ==null)throw new Exception("Booking with this id is not found");
         booking.Status = BookingStatus.Confirmed;
         var scheduleId = booking.Tickets.First().ScheduleId;
         var seatsId = booking.Tickets.Select(t => t.SeatId).ToList();
