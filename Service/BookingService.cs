@@ -10,7 +10,7 @@ namespace Service;
 
 public class BookingService(IUnitOfWork unitOfWork, IMapper mapper,ServiceManager serviceManager) : IBookingService
 {
-    public async Task<BookingDetailsDto> CreateBookingAsync(int scheduleId, List<int> seatIds,string temporaryId)
+    public async Task<BookingDetailsDto> CreateBookingAsync(int scheduleId, List<int> seatIds,string temporaryId,string userId)
     {
         if(scheduleId <=0) throw new Exception("Invalid scheduleId");
         if(seatIds==null||!seatIds.Any()) throw new Exception("no seats selected");
@@ -23,7 +23,8 @@ public class BookingService(IUnitOfWork unitOfWork, IMapper mapper,ServiceManage
             BookingDate = DateTime.UtcNow,
             TotalPrice = totalPrice,
             Status = BookingStatus.Pending,
-            ConfirmationNumber = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper()
+            ConfirmationNumber = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper(),
+            UserId = userId
         };
         foreach (var seat in seatIds)
         {
@@ -46,11 +47,7 @@ public class BookingService(IUnitOfWork unitOfWork, IMapper mapper,ServiceManage
         var result= mapper.Map<BookingDetailsDto>(booking);
         return result;
     }
-
-    public Task<List<BookingHistoryDto>> GetUserBookingsAsync(string userId)
-    {
-        throw new NotImplementedException();
-    }
+    
 
     public async Task<IEnumerable<BookingDto>> GetAllBookingsAsync()
     {
@@ -74,8 +71,13 @@ public class BookingService(IUnitOfWork unitOfWork, IMapper mapper,ServiceManage
         return schedulePrice.BasePrice * seatIds.Count;
     }
 
-    public Task ConfirmBookingAsync(Guid bookingId)
+    public async Task ConfirmBookingAsync(int bookingId)
     {
-        throw new NotImplementedException();
+        var booking = await unitOfWork.GetRepo<Booking, int>().GetByIdAsync(bookingId);
+        booking.Status = BookingStatus.Confirmed;
+        var scheduleId = booking.Tickets.First().ScheduleId;
+        var seatsId = booking.Tickets.Select(t => t.SeatId).ToList();
+        await serviceManager.SeatService.ReleaseSeatAsync(scheduleId, seatsId);
+        await unitOfWork.SaveChangesAsync();
     }
 }
