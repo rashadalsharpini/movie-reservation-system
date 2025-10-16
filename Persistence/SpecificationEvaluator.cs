@@ -1,6 +1,7 @@
 using Domain.Contracts;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Persistence;
 
@@ -16,6 +17,8 @@ public static class SpecificationEvaluator
             query = query.OrderByDescending(specifications.OrderByDescending);
         if (specifications.Includes is not null && specifications.Includes.Count > 0)
             query = specifications.Includes.Aggregate(query, (current, include) => current.Include(include));
+        if(specifications.IncludeExpressions is not null && specifications.IncludeExpressions.Count > 0)
+            query = specifications.IncludeExpressions.Aggregate(query, (current, include) => include(current));
         if (specifications.IsPagination)
             query = query.Skip(specifications.Skip).Take(specifications.Take);
         return query;

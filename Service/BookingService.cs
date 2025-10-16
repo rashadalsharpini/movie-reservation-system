@@ -1,0 +1,90 @@
+using AutoMapper;
+using Domain.Contracts;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Service.Specifications;
+using ServiceAbstraction;
+using Shared.Dtos;
+
+namespace Service;
+
+public class BookingService(IUnitOfWork unitOfWork, IMapper mapper,ServiceManager serviceManager) : IBookingService
+{
+    public async Task<BookingDetailsDto> CreateBookingAsync(int scheduleId, List<int> seatIds,string temporaryId,string userId)
+    {
+        if(scheduleId <=0) throw new Exception("Invalid scheduleId");
+        if(seatIds==null||!seatIds.Any()) throw new Exception("no seats selected");
+        var availabilitySeats = await serviceManager.SeatService.AreSeatsAvailableAsync(scheduleId, seatIds);
+        if(!availabilitySeats) throw new Exception("Seats is not available");
+        await serviceManager.SeatService.ReserveSeatAsync(scheduleId,seatIds,temporaryId);
+        var totalPrice= await CalculateTotalPriceAsync(scheduleId, seatIds);
+        var newbooking = new Booking()
+        {
+            BookingDate = DateTime.UtcNow,
+            TotalPrice = totalPrice,
+            Status = BookingStatus.Pending,
+            ConfirmationNumber = Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper(),
+            UserId = userId
+        };
+        foreach (var seat in seatIds)
+        {
+            var ticket = new Ticket()
+            {
+                Price = totalPrice / seatIds.Count,
+                SeatId = seat,
+                ScheduleId = scheduleId
+            };
+            newbooking.Tickets.Add(ticket);
+        }
+        await unitOfWork.GetRepo<Booking,int>().AddAsync(newbooking);
+        await unitOfWork.SaveChangesAsync();
+        return await GetBookingByIdAsync(newbooking.Id);
+    }
+
+    public async Task<BookingDetailsDto> GetBookingByIdAsync(int bookingId)
+    {
+        var booking = await unitOfWork.GetRepo<Booking, int>().GetByIdAsync(new BookingSpecifications(bookingId));
+        var result= mapper.Map<BookingDetailsDto>(booking);
+        return result;
+    }
+    
+
+    public async Task<IEnumerable<BookingDto>> GetAllBookingsAsync()
+    {
+        // ** Ya Rashade **
+        //this method is not completed yet because it need to using specification and also pagination and don't forget to upload includs with bookings
+        // and you can make the includs here in the service but put it in specification for clean code
+        var bookings = await unitOfWork.GetRepo<Booking, int>().GetAllAsync();
+        var result = mapper.Map<IEnumerable<BookingDto>>(bookings);
+        return result;
+    }
+
+    public async Task<bool> CancelBookingAsync(int bookingId)
+    {
+        var booking = await unitOfWork.GetRepo<Booking, int>().GetByIdAsync(bookingId);
+        if(booking==null) throw new Exception("Booking with this id is not found");
+        booking.Status = BookingStatus.Cancelled;
+        var scheduleId = booking.Tickets.First().ScheduleId;
+        var seatsId = booking.Tickets.Select(t => t.SeatId).ToList();
+        await serviceManager.SeatService.ReleaseSeatAsync(scheduleId, seatsId);
+       return await unitOfWork.SaveChangesAsync()>0;
+    }
+
+    public async Task<decimal> CalculateTotalPriceAsync(int scheduleId, List<int> seatIds)
+    {
+        var schedulePrice = await unitOfWork.GetRepo<Schedule, int>().GetByIdAsync(scheduleId);
+        if (schedulePrice == null) throw new Exception("Schedule id is not found");
+        return schedulePrice.BasePrice * seatIds.Count;
+    }
+
+    public async Task ConfirmBookingAsync(int bookingId)
+    {
+        var booking = await unitOfWork.GetRepo<Booking, int>().GetByIdAsync(bookingId);
+        if(booking ==null)throw new Exception("Booking with this id is not found");
+        booking.Status = BookingStatus.Confirmed;
+        var scheduleId = booking.Tickets.First().ScheduleId;
+        var seatsId = booking.Tickets.Select(t => t.SeatId).ToList();
+        await serviceManager.SeatService.ReleaseSeatAsync(scheduleId, seatsId);
+        await unitOfWork.SaveChangesAsync();
+    }
+}
